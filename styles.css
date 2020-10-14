@@ -14,3 +14,7 @@
 .y-axis-label {
     writing-mode: vertical-lr;
 }
+
+.tooltip {
+	display: block;
+}
