@@ -46,6 +46,8 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .range([5, 20])
 
 
+    const colors =  d3.scaleOrdinal(d3.schemeTableau10)
+
     let circles = svg.selectAll('.chart')
         .data(data)
         .enter()
@@ -53,11 +55,13 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('cx', d=>xScale(d.Income))
         .attr('cy', d=>yScale(d.LifeExpectancy))
         .attr('r', d=>popScale(d.Population))
-//        .attr('fill', 'cadetblue')
+        .attr('fill', d => colors(d.Region))
         .attr('stroke', 'black')
         .attr('opacity', 0.80)
 
   
+   
+
     const xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(5, "s")
@@ -87,15 +91,17 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('y', 0)
         .text("Life Expectancy")
 
+    /*
     let regions = new Set()
     regions.add(data.Regions)
     console.log(regions)
 
+    
     const colorScale = d3  
         .scaleOrdinal()
         .domain(['Sub-Saharan Africa', 'East Asia & Pacific', 'Middle East & North Africa', 'America', 'Europe & Central Asia', 'South Asia'])
         .range(d3.schemeTableau10)
-    
+    */
     
     let tip = d3.selectAll('circle')
         .on("mouseenter", (event, d) => {
