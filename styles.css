@@ -16,5 +16,6 @@
 }
 
 .tooltip {
-	display: block;
+	color: black;
+	position: fixed;
 }
