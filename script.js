@@ -56,6 +56,7 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
 //        .attr('fill', 'cadetblue')
         .attr('stroke', 'black')
         .attr('opacity', 0.80)
+
   
     const xAxis = d3.axisBottom()
         .scale(xScale)
@@ -86,11 +87,44 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('y', 0)
         .text("Life Expectancy")
 
-    let regions = new Set(data, d => d.Region)
+    let regions = new Set()
+    regions.add(data.Regions)
     console.log(regions)
 
     const colorScale = d3  
         .scaleOrdinal()
-        .domain(regions)
-        .range(d3.schemeTableau10);
+        .domain(['Sub-Saharan Africa', 'East Asia & Pacific', 'Middle East & North Africa', 'America', 'Europe & Central Asia', 'South Asia'])
+        .range(d3.schemeTableau10)
+    
+    
+    let tip = d3.selectAll('circle')
+        .on("mouseenter", (event, d) => {
+            // show tooltip
+            let country = d;
+            const pos = d3.pointer(event, window); 
+            console.log('pos ', pos);
+            console.log(country);
+            d3.select('.country-name')
+                .text(d => country.Country)
+                .attr('x', pos[0]+10)
+                .attr('y', pos[1]);
+            d3.select('.country-region')
+                .text(d => country.Region)
+                .attr('x', pos[0]+20)
+                .attr('y', pos[1]+10);
+            d3.select('.country-pop')
+                .text(d => country.Population)
+                .attr('x', pos[0]+30)
+                .attr('y', pos[1]+20);
+            d3.select('.country-income')
+                .text(d => country.Income)
+                .attr('x', pos[0]+40)
+                .attr('y', pos[1]+30);
+           
+         })
+        .on("mouseleave", (event, d) => {
+            // hide tooltip
+            return;
+        })
+    
     }); 
