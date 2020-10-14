@@ -108,6 +108,18 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
             // show tooltip
             let country = d;
             const pos = d3.pointer(event, window); 
+            console.log(pos)
+            console.log(d)
+            d3.select('.tooltip')
+                .style('display', 'inline-block')
+                .style('position', 'Fixed')
+                .style('left', pos[0]+10+'px')
+                .style('top', pos[1]+10+'px')
+                //.style('Top', pos[1])
+                //.style('Left', pos[0])
+                .html('Country: ' + d.Country + '<br>Region: ' + d.Region + '<br>Population: '+ d.Population + '<br>Income: '+ d.Income + '<br>Life Expectancy: ' + d.LifeExpectancy);
+
+            /*
             console.log('pos ', pos);
             console.log(country);
             d3.select('.country-name')
@@ -126,7 +138,7 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
                 .text(d => country.Income)
                 .attr('x', pos[0]+40)
                 .attr('y', pos[1]+30);
-           
+           */
          })
         .on("mouseleave", (event, d) => {
             // hide tooltip
