@@ -4,39 +4,46 @@ let lifeMin;
 let incomeMax;
 let incomeMin;
 
+const margin = ({top: 20, right: 20, bottom: 20, left: 20});
+const width = 650 - margin.left - margin.right,
+height = 500 - margin.top - margin.bottom;
+
 d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
     console.log('cities and data ', data)
 
-    const svg = d3.select('.chart').append('svg')
-        .attr('height', 500)
-        .attr('width', 650)
+    const svg = d3.select(".chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+	    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
 
-    incomeMax = d3.max(data, d => d.Income)
-    incomeMin = d3.min(data, d => d.Income)
+    incomeMax = d3.max(data, d => d.Income);
+    incomeMin = d3.min(data, d => d.Income);
     //console.log('income min = ', incomeMin, 'income max = ', incomeMax)
 
-    lifeMax = d3.max(data, d => d.LifeExpectancy)
-    lifeMin = d3.min(data, d => d.LifeExpectancy)
+    lifeMax = d3.max(data, d => d.LifeExpectancy);
+    lifeMin = d3.min(data, d => d.LifeExpectancy);
 
-    incomeMax = d3.max(data, d => d.Income)
-    incomeMin = d3.min(data, d => d.Income)
+    incomeMax = d3.max(data, d => d.Income);
+    incomeMin = d3.min(data, d => d.Income);
 
 
     const xScale = d3
         .scaleLinear()
         .domain([incomeMin, incomeMax])
-        .range([0, 500])
+        .range([0, width]);
 
     const yScale = d3
         .scaleLinear()
         .domain([lifeMin, lifeMax])
-        .range([400,0])
+        .range([height,0]);
 
     // scale so we can use population to determine size of circles
     const popScale = d3
         .scaleLinear()
         .domain(d3.extent(data, d => d.Population))
-        .range([5, 20])
+        .range([5, 20]);
 
 
     let circles = svg.selectAll('.chart')
@@ -49,29 +56,38 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('fill', 'cadetblue')
         .attr('stroke', 'black')
         .attr('opacity', 0.80);
-
-
-
-    const margin = ({top: 20, right: 20, bottom: 20, left: 20});
-    const width = 650 - margin.left - margin.right;
-    console.log('width ', width);
-    const height = 500 - margin.top - margin.bottom;
-    console.log('height ', height);
-
-    const svg2 = d3.select(".chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-	.append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  
     const xAxis = d3.axisBottom()
-        .scale(xScale);
-
+        .scale(xScale)
+        .ticks(5, "s");
+    
     const yAxis = d3.axisLeft()
-        .scale(yScale);
+        .scale(yScale)
+        .ticks(10, "s");
 
-    svg2.append("g")
+    svg.append("g")
         .attr("class", "axis x-axis")
+        .attr("transform", `translate(0, ${height})`)
         .call(xAxis);
+    
+    svg.append("g")
+        .attr("class", "axis y-axis")
+        .call(yAxis);
 
+    // x axis label
+    svg.append('text')
+        .attr('x', 550)
+        .attr('y', 455)
+        .text("Income");
+    
+    svg.append('text')
+        .attr("class", "y-axis-label")
+        .attr('x', 15)
+        .attr('y', 0)
+        .text("Life Expectancy");
+
+    const colorScale = d3  
+        .scaleOrdinal()
+        .domain(data, d => d.Region)
+        .range(d3.schemeTableau10);
     }); 
