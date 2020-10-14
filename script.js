@@ -110,39 +110,20 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
             const pos = d3.pointer(event, window); 
             console.log(pos)
             console.log(d)
+            let form1 = d3.format(',.4r') // format population
+            let form2 = d3.format("$,.3r") // format income
+            let form3 = d3.format('.0f') // format life expectancy
             d3.select('.tooltip')
                 .style('display', 'inline-block')
                 .style('position', 'Fixed')
                 .style('left', pos[0]+10+'px')
                 .style('top', pos[1]+10+'px')
-                //.style('Top', pos[1])
-                //.style('Left', pos[0])
-                .html('Country: ' + d.Country + '<br>Region: ' + d.Region + '<br>Population: '+ d.Population + '<br>Income: '+ d.Income + '<br>Life Expectancy: ' + d.LifeExpectancy);
-
-            /*
-            console.log('pos ', pos);
-            console.log(country);
-            d3.select('.country-name')
-                .text(d => country.Country)
-                .attr('x', pos[0]+10)
-                .attr('y', pos[1]);
-            d3.select('.country-region')
-                .text(d => country.Region)
-                .attr('x', pos[0]+20)
-                .attr('y', pos[1]+10);
-            d3.select('.country-pop')
-                .text(d => country.Population)
-                .attr('x', pos[0]+30)
-                .attr('y', pos[1]+20);
-            d3.select('.country-income')
-                .text(d => country.Income)
-                .attr('x', pos[0]+40)
-                .attr('y', pos[1]+30);
-           */
-         })
+                .html('Country: ' + d.Country + '<br>Region: ' + d.Region + '<br>Population: '+ form1(d.Population) + '<br>Income: '+ form2(d.Income) + '<br>Life Expectancy: ' + form3(d.LifeExpectancy) + ' years');
+                })
         .on("mouseleave", (event, d) => {
             // hide tooltip
-            return;
+            d3.select('.tooltip')
+                .style('display', 'none');
         })
     
     }); 
