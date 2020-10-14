@@ -15,35 +15,35 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
 	    .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     
 
-    incomeMax = d3.max(data, d => d.Income);
-    incomeMin = d3.min(data, d => d.Income);
+    incomeMax = d3.max(data, d => d.Income)
+    incomeMin = d3.min(data, d => d.Income)
     //console.log('income min = ', incomeMin, 'income max = ', incomeMax)
 
-    lifeMax = d3.max(data, d => d.LifeExpectancy);
-    lifeMin = d3.min(data, d => d.LifeExpectancy);
+    lifeMax = d3.max(data, d => d.LifeExpectancy)
+    lifeMin = d3.min(data, d => d.LifeExpectancy)
 
-    incomeMax = d3.max(data, d => d.Income);
-    incomeMin = d3.min(data, d => d.Income);
+    incomeMax = d3.max(data, d => d.Income)
+    incomeMin = d3.min(data, d => d.Income)
 
 
     const xScale = d3
         .scaleLinear()
         .domain([incomeMin, incomeMax])
-        .range([0, width]);
+        .range([0, width])
 
     const yScale = d3
         .scaleLinear()
         .domain([lifeMin, lifeMax])
-        .range([height,0]);
+        .range([height,0])
 
     // scale so we can use population to determine size of circles
     const popScale = d3
         .scaleLinear()
         .domain(d3.extent(data, d => d.Population))
-        .range([5, 20]);
+        .range([5, 20])
 
 
     let circles = svg.selectAll('.chart')
@@ -53,41 +53,44 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('cx', d=>xScale(d.Income))
         .attr('cy', d=>yScale(d.LifeExpectancy))
         .attr('r', d=>popScale(d.Population))
-        .attr('fill', 'cadetblue')
+//        .attr('fill', 'cadetblue')
         .attr('stroke', 'black')
-        .attr('opacity', 0.80);
+        .attr('opacity', 0.80)
   
     const xAxis = d3.axisBottom()
         .scale(xScale)
-        .ticks(5, "s");
+        .ticks(5, "s")
     
     const yAxis = d3.axisLeft()
         .scale(yScale)
-        .ticks(10, "s");
+        .ticks(10, "s")
 
     svg.append("g")
         .attr("class", "axis x-axis")
         .attr("transform", `translate(0, ${height})`)
-        .call(xAxis);
+        .call(xAxis)
     
     svg.append("g")
         .attr("class", "axis y-axis")
-        .call(yAxis);
+        .call(yAxis)
 
     // x axis label
     svg.append('text')
         .attr('x', 550)
         .attr('y', 455)
-        .text("Income");
+        .text("Income")
     
     svg.append('text')
         .attr("class", "y-axis-label")
         .attr('x', 15)
         .attr('y', 0)
-        .text("Life Expectancy");
+        .text("Life Expectancy")
+
+    let regions = new Set(data, d => d.Region)
+    console.log(regions)
 
     const colorScale = d3  
         .scaleOrdinal()
-        .domain(data, d => d.Region)
+        .domain(regions)
         .range(d3.schemeTableau10);
     }); 
