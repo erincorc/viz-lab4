@@ -119,8 +119,8 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
             d3.select('.tooltip')
                 .style('display', 'inline-block')
                 .style('position', 'Fixed')
-                .style('left', pos[0]+10+'px')
-                .style('top', pos[1]+10+'px')
+                .style('left', pos[0]+5+'px')
+                .style('top', pos[1]+5+'px')
                 .html('Country: ' + d.Country + '<br>Region: ' + d.Region + '<br>Population: '+ form1(d.Population) + '<br>Income: '+ form2(d.Income) + '<br>Life Expectancy: ' + form3(d.LifeExpectancy) + ' years');
                 })
         .on("mouseleave", (event, d) => {
