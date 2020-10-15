@@ -46,7 +46,7 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .range([5, 20])
 
 
-    const colors =  d3.scaleOrdinal(d3.schemeTableau10)
+    const colors =  d3.scaleOrdinal(d3.schemeTableau10) // put region data in here and it will map
 
     let circles = svg.selectAll('.chart')
         .data(data)
@@ -57,10 +57,9 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('r', d=>popScale(d.Population))
         .attr('fill', d => colors(d.Region))
         .attr('stroke', 'black')
-        .attr('opacity', 0.80)
+        .attr('opacity', 0.70)
 
   
-   
 
     const xAxis = d3.axisBottom()
         .scale(xScale)
@@ -70,11 +69,13 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .scale(yScale)
         .ticks(10, "s")
 
+    // call x axis
     svg.append("g")
         .attr("class", "axis x-axis")
         .attr("transform", `translate(0, ${height})`)
         .call(xAxis)
     
+    // call y axis 
     svg.append("g")
         .attr("class", "axis y-axis")
         .call(yAxis)
@@ -85,6 +86,7 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .attr('y', 455)
         .text("Income")
     
+    // y axis label
     svg.append('text')
         .attr("class", "y-axis-label")
         .attr('x', 15)
@@ -103,6 +105,7 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .range(d3.schemeTableau10)
     */
     
+    // tooltip
     let tip = d3.selectAll('circle')
         .on("mouseenter", (event, d) => {
             // show tooltip
@@ -126,4 +129,31 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
                 .style('display', 'none');
         })
     
+
+    // create legend
+    const regionsList = new Set(data.map(data => data.Region))
+    console.log(regionsList)
+
+    let legendSVG = svg.append('g')
+        .attr('class', 'legend') // so we can manipulate CSS
+        .attr('width', 100)
+        .attr('height', 150)
+
+    legendSVG.selectAll('.legendSquares')
+        .data(regionsList)
+        .enter()
+        .append('rect')
+        .attr('x', 450)
+        .attr('y', (d, i) => (height - 150 + i*20))
+        .attr('width', 10)
+        .attr('height', 10)
+        .style('fill', d => colors(d))
+
+    legendSVG.selectAll('.legendText')
+        .data(regionsList)
+        .enter()
+        .append('text')
+        .attr('x', 465)
+        .attr('y', (d, i) => (height - 142 + i*20))
+        .text(data => data)
     }); 
