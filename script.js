@@ -155,5 +155,5 @@ d3.csv('wealth-health-2014.csv', d3.autoType).then( data => {
         .append('text')
         .attr('x', 465)
         .attr('y', (d, i) => (height - 142 + i*20))
-        .text(data => data)
+        .text(data => data);
     }); 
